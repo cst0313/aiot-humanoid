@@ -1,0 +1,139 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
+import numpy as np
+
+from cnn import element_wise_op
+
+from activators import ReluActivator, IdentityActivator
+
+
+class RecurrentLayer(object):
+    def __init__(self, input_width, state_width,
+                 activator, learning_rate):
+        self.input_width = input_width
+        self.state_width = state_width
+        self.activator = activator
+        self.learning_rate = learning_rate
+        self.times = 0       #current time=0
+        self.state_list = [] #for saving states
+        self.state_list.append(np.zeros(
+            (state_width, 1)))           #initialize states
+        self.U = np.random.uniform(-1e-4, 1e-4,
+            (state_width, input_width))  #initialize input weight matrix
+        self.W = np.random.uniform(-1e-4, 1e-4,
+            (state_width, state_width))  #initialize output weight matrix
+
+    def forward(self, input_array):
+        self.times += 1
+        state = (np.dot(self.U, input_array) +
+                 np.dot(self.W, self.state_list[-1]))
+        element_wise_op(state, self.activator.forward)
+        self.state_list.append(state)
+
+    def backward(self, sensitivity_array, 
+                 activator):
+        #implement BPTT
+        self.calc_delta(sensitivity_array, activator)
+        self.calc_gradient()
+
+    def update(self):
+        #gradient descent, update
+        self.W -= self.learning_rate * self.gradient
+
+    def calc_delta(self, sensitivity_array, activator):
+        self.delta_list = []  #to save errors in each iteration
+        for i in range(self.times):
+            self.delta_list.append(np.zeros(
+                (self.state_width, 1)))
+        self.delta_list.append(sensitivity_array)
+        #Iteratively compute the error term at each moment
+        for k in range(self.times - 1, 0, -1):
+            self.calc_delta_k(k, activator)
+
+    def calc_delta_k(self, k, activator):
+        #we calculate the kth delta according to the k+1th delta (in time)
+        state = self.state_list[k+1].copy()
+        element_wise_op(self.state_list[k+1],
+                    activator.backward)
+        self.delta_list[k] = np.dot(
+            np.dot(self.delta_list[k+1].T, self.W),
+            np.diag(state[:,0])).T
+
+    def calc_gradient(self):
+        self.gradient_list = [] #to save the gradients for each moment
+        for t in range(self.times + 1):
+            self.gradient_list.append(np.zeros(
+                (self.state_width, self.state_width)))
+        for t in range(self.times, 0, -1):
+            self.calc_gradient_t(t)
+        self.gradient = reduce(
+            lambda a, b: a + b, self.gradient_list,
+            self.gradient_list[0]) #the real gradient is the sum of the gradients through time
+
+    def calc_gradient_t(self, t):
+        #simple calculation of gradient at time t
+        gradient = np.dot(self.delta_list[t],
+            self.state_list[t-1].T)
+        self.gradient_list[t] = gradient
+
+    def reset_state(self):
+        self.times = 0       #current timestamp is zero
+        self.state_list = [] #empty all states
+        self.state_list.append(np.zeros(
+            (self.state_width, 1)))      #initialize all states to 1 as in _init_
+
+
+def data_set():
+    #here we will feed the network all reference states
+    return array of data
+
+
+def gradient_check():
+    #check if there are bugs in our network
+    error_function = lambda o: o.sum()
+    
+    rl = RecurrentLayer(3, 2, IdentityActivator(), 1e-3)
+
+    #calculate forward value
+    x, d = data_set()
+    rl.forward(x[0])
+    rl.forward(x[1])
+    
+    #to understand the influence of each parameter in our end result
+    sensitivity_array = np.ones(rl.state_list[-1].shape,
+                                dtype=np.float64)
+    #calculate step
+    rl.backward(sensitivity_array, IdentityActivator())
+    
+    #check step
+    epsilon = 10e-4
+    for i in range(rl.W.shape[0]):
+        for j in range(rl.W.shape[1]):
+            rl.W[i,j] += epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err1 = error_function(rl.state_list[-1])
+            rl.W[i,j] -= 2*epsilon
+            rl.reset_state()
+            rl.forward(x[0])
+            rl.forward(x[1])
+            err2 = error_function(rl.state_list[-1])
+            expect_grad = (err1 - err2) / (2 * epsilon) #classic math here
+            rl.W[i,j] += epsilon
+            print 'weights(%d,%d): expected - actural %f - %f' % (
+                i, j, expect_grad, rl.gradient[i,j])
+
+
+def test():
+    l = RecurrentLayer(3, 2, ReluActivator(), 1e-3)
+    datas = data_set()
+    l.forward(data[0])
+    l.forward(data[1])
+    l.backward(data, ReluActivator())
+    return l
+
+
+
+
