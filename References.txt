@@ -1,0 +1,73 @@
+Here's an informal reference page (I didn't use ACM format since this is not strict research conducted in an university)
+
+https://www.researchgate.net/publication/228959234_Transfer_learning_for_reinforcement_learning_on_a_physical_robot)
+Transfer learning for reinforcement learning on a physical robot(2010)
+
+https://montreal.ubisoft.com/en/supertrack-motion-tracking-for-physically-simulated-characters-using-supervised-learning/
+SuperTrack – Motion Tracking for Physically Simulated Characters using Supervised Learning(2021)
+
+https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21
+Illustrated Guide to LSTM’s and GRU’s: A step by step explanation
+
+https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45
+Animated RNN, LSTM and GRU
+
+https://arxiv.org/abs/1804.02717
+SIGGRAPH 2018: DeepMimic: Example-Guided Deep Reinforcement Learning of Physics-Based Character Skills
+
+https://blog.csdn.net/weixin_41888257/article/details/104513891
+Notes for DeepMimic 
+
+https://www.youtube.com/watch?v=KZgf0F9mdP0
+A video analysing the DeepMimic paper
+
+https://arxiv.org/abs/1507.06527
+Deep Recurrent Q-Learning for Partially Observable MDPs
+
+https://dl.acm.org/doi/fullHtml/10.1145/3359566.3360072
+Self-Imitation Learning of Locomotion Movements through Termination Curriculum
+
+https://arxiv.org/abs/2104.02180
+SIGGRAPH 2021: AMP: Adversarial Motion Priors for Stylized Physics-Based Character Control
+
+https://en.wikipedia.org/wiki/Backpropagation_through_time
+Backpropagation through time technique(BPTT)
+
+https://arxiv.org/abs/1312.5602
+Playing Atari with Deep Reinforcement Learning
+
+https://mrl.snu.ac.kr/research/ProjectManyMuscle/index.html
+Locomotion Control for Many-Muscle Humanoids (Considering muscles, not joints)
+
+https://www.youtube.com/watch?v=JZKaqQKcAnw
+Video from Ubisoft on Ragdoll Motion Matching
+
+https://github.com/Sohojoe/ActiveRagdollStyleTransfer
+Research into locomotion style transfer with Active Ragdolls (using MarathonEnvs +ml_agents)
+
+https://arxiv.org/abs/1606.01540
+OpenAI Gym
+
+https://arxiv.org/pdf/1810.02363.pdf
+Recurrent Transition Networks for Character Locomotion from Ubisoft 
+
+https://dl.acm.org/doi/10.1145/3072959.3073663
+Phase-functioned neural networks for character control
+
+https://dl.acm.org/doi/10.1145/1276377.1276510
+Construction and optimal search of interpolated motion graphs (Graph search for next motion, but uses a lot of memory and computation so not desirable)
+
+https://montreal.ubisoft.com/en/drecon-data-driven-responsive-control-of-physics-based-characters/
+DReCon: Data-Driven responsive Control of Physics-Based Characters
+
+http://mocap.cs.cmu.edu/
+CMU Graphics Lab Motion Capture Database
+
+https://mujoco.org/
+Mujoco for advanced physics simulation
+
+https://deepmind.com/blog/article/producing-flexible-behaviours-simulated-environments
+DeepMind blog on their research of producing flexible behaviours in simulated environments
+
+https://arxiv.org/abs/1707.02201
+Learning human behaviors from motion capture by adversarial imitation
